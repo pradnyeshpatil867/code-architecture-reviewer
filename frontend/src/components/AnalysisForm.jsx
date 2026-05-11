@@ -1,12 +1,28 @@
-import { useState } from "react";
-
-const MODELS = ["llama3", "llama3.1", "mistral", "deepseek-coder", "codellama", "phi3", "gemma2"];
+import { useState, useEffect } from "react";
 
 export default function AnalysisForm({ onAnalyze }) {
-  const [repoUrl, setRepoUrl]       = useState("");
+  const [models, setModels] = useState(["llama3"]); // fallback default
+  const [loadingModels, setLoadingModels] = useState(true);
+  const [repoUrl, setRepoUrl]         = useState("");
   const [githubToken, setGithubToken] = useState("");
   const [ollamaModel, setOllamaModel] = useState("llama3");
-  const [showToken, setShowToken]   = useState(false);
+  const [showToken, setShowToken]     = useState(false);
+
+  useEffect(() => {
+    fetch("http://localhost:11434/api/tags")
+      .then(r => r.json())
+      .then(data => {
+        const names = data.models?.map(m => m.name) ?? [];
+        if (names.length > 0) {
+          setModels(names);
+          setOllamaModel(names[0]);
+        }
+      })
+      .catch(() => {
+        // Ollama not reachable — keep the fallback default
+      })
+      .finally(() => setLoadingModels(false));
+  }, []);
 
   const isValid = repoUrl.includes("github.com/");
 
@@ -26,9 +42,18 @@ export default function AnalysisForm({ onAnalyze }) {
       </div>
 
       <div className="field">
-        <label>Ollama Model</label>
-        <select value={ollamaModel} onChange={(e) => setOllamaModel(e.target.value)}>
-          {MODELS.map((m) => <option key={m} value={m}>{m}</option>)}
+        <label>
+          Ollama Model{" "}
+          {loadingModels && (
+            <span style={{ color: "var(--text-3)", fontWeight: 400 }}>(detecting...)</span>
+          )}
+        </label>
+        <select
+          value={ollamaModel}
+          onChange={(e) => setOllamaModel(e.target.value)}
+          disabled={loadingModels}
+        >
+          {models.map((m) => <option key={m} value={m}>{m}</option>)}
         </select>
       </div>
 
