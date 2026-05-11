@@ -109,13 +109,16 @@ Dependency edges:
 High-coupling modules:
 {coupling_summary if coupling_summary else "None detected."}
 
+IMPORTANT: The exact module names in this codebase are: {[n.label for n in state['nodes']]}
+You MUST use only these exact names in the "affected_nodes" field. Do not invent file names or concept names.
+
 Identify up to 4 issues. Respond with JSON array:
 [
   {{
     "severity": "critical|warning|info",
     "title": "Short issue title",
     "description": "What the problem is",
-    "affected_nodes": ["module1", "module2"],
+    "affected_nodes": ["use exact module names from the list above only"],
     "suggestion": "How to fix it"
   }}
 ]
@@ -161,8 +164,8 @@ Tech stack: {', '.join(state['tech_stack'])}
 Total modules: {len(state['nodes'])}
 Total dependencies: {len(state['edges'])}
 
-Issues found so far:
-{prior_issues if prior_issues else "None"}
+IMPORTANT: The exact module names in this codebase are: {[n.label for n in state['nodes']]}
+You MUST use only these exact names in the "affected_nodes" field. Do not invent file names or concept names.
 
 Respond with JSON:
 {{
@@ -171,7 +174,7 @@ Respond with JSON:
       "severity": "critical|warning|info",
       "title": "Issue title",
       "description": "Detailed description",
-      "affected_nodes": ["module"],
+      "affected_nodes": ["use exact module names from the list above only"],
       "suggestion": "Concrete fix"
     }}
   ],

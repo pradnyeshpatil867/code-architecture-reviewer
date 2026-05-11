@@ -3,15 +3,20 @@ const ORDER = { critical: 0, warning: 1, info: 2 };
 export default function IssuesPanel({ issues, activeNode }) {
   const sorted = [...issues].sort((a, b) => (ORDER[a.severity] ?? 3) - (ORDER[b.severity] ?? 3));
   const visible = activeNode
-    ? sorted.filter(i => i.affected_nodes?.includes(activeNode))
-    : sorted;
+  ? sorted.filter(i =>
+      i.affected_nodes?.some(n =>
+        n.toLowerCase().includes(activeNode.toLowerCase()) ||
+        activeNode.toLowerCase().includes(n.toLowerCase())
+      )
+    )
+  : sorted;
 
   return (
     <div className="issues-panel">
       <p className="panel-label">
         // Issues{" "}
         <span style={{ color: "var(--text-3)", fontWeight: 400 }}>
-          ({issues.length}){activeNode && ` · ${activeNode}`}
+          ({visible.length}){activeNode && ` · ${activeNode}`}
         </span>
       </p>
 

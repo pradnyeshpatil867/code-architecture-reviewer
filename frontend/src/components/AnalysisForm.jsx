@@ -69,7 +69,7 @@ export default function AnalysisForm({ onAnalyze }) {
           onChange={(e) => setGithubToken(e.target.value)}
         />
         <span
-          style={{ fontSize: 10, color: "var(--text-3)", cursor: "pointer", fontFamily: "var(--font-mono)" }}
+          style={{ fontSize: 10, color: "var(--accent)", cursor: "pointer", textDecoration: "underline", fontFamily: "var(--font-mono)" }}
           onClick={() => setShowToken((v) => !v)}
         >
           {showToken ? "hide" : "show"}

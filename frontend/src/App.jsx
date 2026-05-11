@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AnalysisForm from "./components/AnalysisForm";
 import GraphCanvas from "./components/GraphCanvas";
 import IssuesPanel from "./components/IssuesPanel";
@@ -12,6 +12,14 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [activeNode, setActiveNode] = useState(null);
+  const leftPanelRef = useRef(null);
+
+
+  useEffect(() => {
+  if (phase === "done" && leftPanelRef.current) {
+    leftPanelRef.current.scrollTop = 0;
+  }
+}, [phase]);
 
   const handleAnalyze = async ({ repoUrl, githubToken, ollamaModel }) => {
     setPhase("loading");
@@ -113,8 +121,8 @@ export default function App() {
 
         {phase === "done" && result && (
           <div className="results-layout">
-            <div className="results-left">
-              <SummaryPanel result={result} onReset={() => setPhase("idle")} />
+            <div className="results-left" ref={leftPanelRef}>
+              <SummaryPanel result={result} onReset={() => { setPhase("idle"); setResult(null); }} />
               <IssuesPanel issues={result.issues} activeNode={activeNode} />
             </div>
             <div className="results-graph">

@@ -58,7 +58,7 @@ function layoutNodes(nodes, edges) {
     const ids = tiers[tier];
     const totalWidth = (ids.length - 1) * 170;
     ids.forEach((id, i) => {
-      positions[id] = { x: i * 170 - totalWidth / 2 + 300, y: tierIdx * 200 + 60 };
+      positions[id] = { x: i * 170 - totalWidth / 2 + 300, y: tierIdx * 160 + 20 };
     });
   });
   return positions;
@@ -110,8 +110,9 @@ export default function GraphCanvas({ nodes: rawNodes, edges: rawEdges, onNodeCl
         nodes={nodes} edges={edges}
         onNodesChange={onNodesChange} onEdgesChange={onEdgesChange}
         onNodeClick={handleNodeClick}
+        proOptions={{ hideAttribution: true }}
         nodeTypes={nodeTypes}
-        fitView fitViewOptions={{ padding: 0.2 }}
+        fitView fitViewOptions={{ padding: 0.4 }}
         minZoom={0.3} maxZoom={2}
         style={{ background: "transparent" }}
       >
